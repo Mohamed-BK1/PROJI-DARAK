@@ -1,12 +1,14 @@
 <?php
 session_start();
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "darak_db";
+$servername = "mysql-3e6b8f9a-darak.f.aivencloud.com";
+$username   = "avnadmin";
+$password   = "AVNS_ouuoZ4E1RXO4ueR170o";
+$dbname     = "defaultdb";
+$port       = 21817;
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// إنشاء الاتصال بقاعدة البيانات السحابية
+$conn = new mysqli($servername, $username, $password, $dbname, $port);
 
 if ($conn->connect_error) {
     die("فشل الاتصال: " . $conn->connect_error);
