@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+   <a href="INDEX.HTML">العودة للصفحة الرئيسية</a>   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دارك - Darak | المنصة العقارية</title>
+    <meta name="google-site-verification" content="Yfkf8HfRsRAR675t4fa6u2iskUFYaYawt5kMY5ikk9E" />
+    <style>
+ 
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                DARAK <span>دارك</span>
+            
+            </div>
+            <div style="font-size: 14px; color: var(--text-muted);">
+                منطقة البحث: <strong>البليدة</strong>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="app-grid">
+            
+            <!-- Sidebar: User Criteria (Matching Engine Input) -->
+            <aside class="card">
+                <div class="card-title">
+                    طلب بحث جديد
+                </div>
+                
+                <form id="searchForm">
+                    <div class="form-group">
+                        <label>الولاية (Hard Gate)</label>
+                        <select id="wilaya" disabled>
+                            <option value="البليدة" selected>09 - البليدة</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>نوع العملية (Hard Gate)</label>
+                        <select id="intent">
+                            <option value="شراء">شراء</option>
+                            <option value="كراء">كراء</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>نوع العقار (Hard Gate)</label>
+                        <select id="type">
+                            <option value="شقة">شقة</option>
+                            <option value="فيلة">فيلة</option>
+                            <option value="قطعة أرض">قطعة أرض</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الميزانية القصوى (د.ج)</label>
+                        <input type="number" id="maxBudget" value="15000000" step="500000">
+                    </div>
+
+                    <div class="form-group">
+                        <label>البلدية المفضلة</label>
+                        <select id="commune">
+                            <option value="الجميع">أي بلدية</option>
+                            <option value="اولاد يعيش">اولاد يعيش</option>
+                            <option value="بوفاريك">بوفاريك</option>
+                            <option value="البليدة مركز">البليدة مركز</option>
+                             <option value=" مفتاح">مفتاح </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>عدد الغرف الأدنى</label>
+                        <input type="number" id="minRooms" value="3" min="1" max="10">
+                    </div>
+
+                    <button type="submit" class="btn"> البحث</button>
+                </form>
+            </aside>
+
+            <!-- Main Content: Matching Results -->
+            <main>
+                <div class="results-header">
+                    <h2>نتائج البحث</h2>
+                    <div class="results-stats" id="statsText">جاري معالجة البيانات...</div>
+                </div>
+
+                <div class="property-list" id="propertyContainer">
+                    <!-- Dynamic Items Will Be Inserted Here -->
+                </div>
+            </main>
+
+        </div>
+    </div>
+
+    <!-- Matching Logic Script -->
+    <script>
+        // 1. Mock Database (بيانات تجريبية تمثل قاعدة بيانات البليدة)
+        const mockDatabase = [
+             { id: 100, title: "شقة F2 للكراء", type: "شقة", intent: "كراء", commune: " مفتاح", price: 6500000, rooms: 3, area: 150 },
+            { id: 101, title: "شقة F4 فاخرة بحي بن بوالعيد", type: "شقة", intent: "شراء", commune: "البليدة مركز", price: 14500000, rooms: 4, area: 120 },
+            { id: 102, title: "فيلة حديثة مع حديقة", type: "فيلة", intent: "شراء", commune: "اولاد يعيش", price: 32000000, rooms: 6, area: 300 },
+            { id: 103, title: "شقة F3 للمطبقة والبيع", type: "شقة", intent: "شراء", commune: "اولاد يعيش", price: 12000000, rooms: 3, area: 85 },
+            { id: 104, title: "شقة للكراء F3 central", type: "شقة", intent: "كراء", commune: "البليدة مركز", price: 50000, rooms: 3, area: 90 },
+            { id: 105, title: "قطعة أرض صالحة للبناء", type: "قطعة أرض", intent: "شراء", commune: "بوفاريك", price: 11000000, rooms: 0, area: 200 },
+            { id: 106, title: "شقة F3 واسعة في بوفاريك", type: "شقة", intent: "شراء", commune: "بوفاريك", price: 13500000, rooms: 3, area: 95 },
+            { id: 107, title: "شقة F4 للكراء", type: "شقة", intent: "كراء", commune: "اولاد يعيش", price: 65000, rooms: 4, area: 110 },
+        ];
+
+        // 2. Matching Engine & Filtering Rules
+        function runMatchingEngine(criteria) {
+            let matches = [];
+
+            mockDatabase.forEach(property => {
+                // --- HARD GATES (الاستبعاد المباشر) ---
+                if (property.intent !== criteria.intent) return;
+                if (property.type !== criteria.type) return;
+                if (property.price > criteria.maxBudget) return;
+
+                // --- SOFT MATCHING & WEIGHTS (احتساب نسبة التوافق) ---
+                let score = 0;
+                let totalPossibleScore = 0;
+
+                // Base Match Penalty (شروط أساسية اجتازت الـ Hard Gate)
+                score += 50; 
+                totalPossibleScore += 50;
+
+                // Location Preference (البلدية) - Weight: 30%
+                totalPossibleScore += 30;
+                if (criteria.commune === "الجميع" || property.commune === criteria.commune) {
+                    score += 30;
+                }
+
+                // Rooms Preference (عدد الغرف) - Weight: 20%
+                totalPossibleScore += 20;
+                if (property.rooms >= criteria.minRooms) {
+                    score += 20;
+                }
+
+                // Calculate final match percentage
+                const matchPercentage = Math.round((score / totalPossibleScore) * 100);
+
+                matches.push({
+                    ...property,
+                    matchPercentage: matchPercentage
+                });
+            });
+
+            // --- SORTING (تجميع وتنسيق: النتائج الأعلى توافقاً أولاً) ---
+            return matches.sort((a, b) => b.matchPercentage - a.matchPercentage);
+        }
+
+        // 3. UI Renderer (عرض النتائج)
+        function renderResults(results) {
+            const container = document.getElementById('propertyContainer');
+            const statsText = document.getElementById('statsText');
+            
+            container.innerHTML = '';
+            statsText.textContent = `تم العثور على ${results.length} عقارات متوافقة`;
+
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <h3>لا توجد نتائج مطابقة</h3>
+                        <p>تم استبعاد جميع العقارات بناءً على الـ Hard Gates (الميزانية، النوع، أو نوع العملية).</p>
+                    </div>
+                `;
+                return;
+            }
+
+            results.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'property-card';
+                card.innerHTML = `
+                    <div class="match-badge">${item.matchPercentage}% تطابق</div>
+                    <div class="property-type">${item.type} • ${item.intent}</div>
+                    <div class="property-title">${item.title}</div>
+                    <div class="property-details">
+                        <span>📍 الموقع: ${item.commune}</span>
+                        ${item.rooms > 0 ? `<span>🛏️ عدد الغرف: ${item.rooms}</span>` : ''}
+                        <span>📐 المساحة: ${item.area} م²</span>
+                    </div>
+                    <div class="property-price">${item.price.toLocaleString()} د.ج</div>
+                    <button class="btn-outline" onclick="alert('طلب إبداء اهتمام للعقار رقم: ${item.id}')"> تواصل</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 4. Form Listener
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const criteria = {
+                intent: document.getElementById('intent').value,
+                type: document.getElementById('type').value,
+                maxBudget: Number(document.getElementById('maxBudget').value),
+                commune: document.getElementById('commune').value,
+                minRooms: Number(document.getElementById('minRooms').value)
+            };
+
+            const results = runMatchingEngine(criteria);
+            renderResults(results);
+        });
+
+        // Initial Run on Page Load
+        document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+    </script>
+</body>
+</html>S

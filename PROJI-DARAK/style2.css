@@ -1,0 +1,271 @@
+
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.mk{
+    text-align: left;
+   margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+.SUB-TITLE{
+    color: rgb(18, 10, 10);
+    WHITE-SPACE: NOWRAP;
+    TEXT-ALIGN: CENTER;}
+
+
+
+
+.main-logo{
+width: 140PX;
+height: 140px;
+position: relative;
+margin-right:1700PX;
+}
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('alg.jpg'); /* تأكد من اسم الصورة هنا تماماً */
+    
+    /* 2. جعل الصورة تغطي كامل الشاشة دون تشويه */
+    background-size: cover;
+    
+    /* 3. تثبيت الخلفية عند النزول لأسفل الصفحة (اختياري لكنه يعطي طابعاً احترافياً) */
+    background-attachment: fixed;
+    
+    /* 4. توسيط الخلفية */
+    background-position: center center;
+    
+    /* 5. منع تكرار الصورة */
+    background-repeat: no-repeat;
+    
+    /* جعل العناصر تترتب في المنتصف */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+
+/* الحاوية الرئيسية لتوزيع العناصر */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 10px;
+   padding: 20px;
+    display: flex;
+    flex-direction: column; /* جعل العناصر تترتب رأسياً (فوق بعضها) */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 500px; /* تحديد عرض مناسب ومريح للعين */
+    padding: 20px;
+    margin: 0 auto;
+}
+/* تصميم قسم النص والشعار */
+.facebook-text {
+   
+max-width: 500px;
+    margin-bottom: 25px;
+    text-align: center;
+    background-color: rgba(172, 27, 27, 0.7); /* إضافة خلفية بيضاء شفافة لتوضيح النص */
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.facebook-text h1 {
+  
+
+    color: #c21010;
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.facebook-text h2 {
+    font-size: 1.7rem;
+    font-weight: normal;
+    line-height: 1.3;
+    color: #e4e7f1;
+    text-align: right;
+    margin: 12PX;
+}
+
+
+/* تصميم صندوق تسجيل الدخول */
+.login-box {
+    background-color: #c22c2c;
+    padding: 20px;
+    border-radius: 0px;
+    box-shadow: 0 4px 12px rgba(18, 13, 15, 10.115);
+    width: 4560px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* تصميم حقول الإدخال */
+
+
+
+input:focus {
+    border-color: #e4e7eb;
+    box-shadow: 0 0 0 2px #5c7c9b;
+}
+
+/* تصميم الأزرار */
+.login-btn {
+    background-color: #18754a;
+    color: rgb(18, 134, 68);
+    font-size: 1.0rem;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    margin: 7PX;
+    transition: background-color 0.2s;
+}
+
+.login-btn:hover {
+    background-color: #9fa5af;
+}
+
+.forgot-password {
+    color: #fdfcfc;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin: 5px 0;
+     padding: 0px;
+}
+
+.forgot-password:hover {
+    text-decoration: ;
+}
+
+hr {
+    border: 0;
+    border-top: 2px solid #03060a;
+    margin-bottom: 40px;
+}
+
+.create-account-btn {
+    background-color: #18e65d;
+    color: rgb(243, 237, 237);
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 67px;
+    cursor: pointer;
+    width: fit-content;
+    margin: 0 auto;
+    transition: background-color 0.2s;
+}
+
+.forgot-password{
+
+      background-color: #f5f4f4;
+    color: rgb(245, 243, 243);
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 2px;
+    border: none;
+    border-radius: 69px;
+    cursor: pointer;
+    width: fit-content;
+    margin: 7 auto;
+    transition: background-color 3s;
+
+}
+
+.forgot-password-hover{
+    background-color: #232225;
+}
+
+
+.create-account-btn:hover {
+    background-color: #149121;
+}
+
+/* النص خارج الصندوق */
+.create-page {
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: #f2f4f8;
+}
+
+.create-page span {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.create-page span:hover {
+    text-decoration: underline;
+}
+
+/* جعل الصفحة متجاوبة مع الشاشات الصغيرة */
+@media (max-width: 900px) 
+    .container{
+        flex-direction: column;
+        text-align: center;
+        width: 100%;
+    }
+    
+.facebook-text {
+        max-width: 100%;
+     margin-left: 0; /* ألغينا الإزاحة القديمة */
+     margin-bottom: 205px; /* مسافة مريحة بين النص وصندوق الإدخال */
+     text-align: center; /* جعل النص في المنتصف تماماً فوق الصندوق */
+        margin-left: 0;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+
+.CNR-text{
+    color: #ede7e7;
+    text-align: center;
+}
+
+.footer-content{
+    background-color: #edecec;
+}
+.login-box {
+        width: 100%;
+        max-width: 350px;
+        width: 100%; /* ليأخذ كامل مساحة الحاوية المحددة بـ 500px */
+        background-color: #232225; /* لونك الحالي  */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    } 
+.footer-content{
+ margin: 99px;
+ background-color: #e6ecf6;
+ border-radius: 67PX;
+ padding: 12px;
+ font-size: 1rem;
+}
+
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 24px; /* تصغير حجم العنوان للشاشة الصغيرة */
+    }
+    .button-group {
+        flex-direction: column; /* جعل الأزرار فوق بعضها إذا كانت متجاورة */
+        width: 100%;
+    }
+}
