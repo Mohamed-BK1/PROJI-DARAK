@@ -1,19 +1,18 @@
 <?php
+session_start();
+
 $servername = "mysql-3e6b8f9a-darak.f.aivencloud.com";
 $username   = "avnadmin";
 $password   = "AVNS_ouuoZ4E1RXO4ueR170o";
 $dbname     = "defaultdb";
 $port       = 21817;
 
-// إنشاء الاتصال مرة واحدة فقط
-$conn = new mysqli($servername, $username, $password, $dbname, $port);
+$conn = mysqli_connect($servername, $username, $password, $dbname, $port);
 
-// التحقق من نجاح الاتصال
-if ($conn->connect_error) {
-    die("فشل الاتصال بقاعدة البيانات: " . $conn->connect_error);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 
-// كود معالجة النموذج (POST) يبدأ هنا دون إعادة إنشاء $conn
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $user_password = trim($_POST['password']);
