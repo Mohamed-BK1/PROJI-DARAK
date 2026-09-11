@@ -1,5 +1,16 @@
 FROM php:8.2-apache
+
 RUN docker-php-ext-install mysqli pdo pdo_mysql
-RUN echo "DirectoryIndex login.php index.php index.html" > /var/www/html/.htaccess
+RUN a2enmod rewrite
+
+# السماح لـ Apache بقراءة الملفات وتغيير DirectoryIndex
+RUN echo "<Directory /var/www/html/>\n\
+    Options Indexes FollowSymLinks\n\
+    AllowOverride All\n\
+    Require all granted\n\
+    DirectoryIndex index.php index.html login.php register.php\n\
+</Directory>" > /etc/apache2/conf-available/override.conf \
+    && a2enconf override
+
 COPY . /var/www/html/
 EXPOSE 80
