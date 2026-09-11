@@ -3,7 +3,7 @@ session_start();
 
 $servername = "mysql-3e6b8f9a-darak.f.aivencloud.com";
 $username   = "avnadmin";
-$password   = "AVNS_ouuoZ4E1RXO4ueR170o";
+$password   = "AVNS_kACyrFC1uWefm1ha0aV";
 $dbname     = "defaultdb";
 $port       = 21817;
 
